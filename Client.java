@@ -29,7 +29,7 @@ public class Client{
 
 			System.out.print("[C] Servizio (C = Conta Parole - E = Elimina Riga): ");
 
-			while((serivce = stdIn.readLine()) != null){
+			while((service = stdIn.readLine()) != null){
 				if(service.equals("C")){
 					 String fileName, delim;
 					 int numParole;
@@ -71,7 +71,7 @@ public class Client{
 		} catch(RemoteException re){
 			System.err.println("[C] Possibile errore nel file; " + re.getMessage());
 			re.printStackTrace();
-		} catch(NotBountException nbe){
+		} catch(NotBoundException nbe){
 			System.err.println("[C] Il nome fornito non risulta nel resgistry; " + nbe.getMessage());
 			System.exit(2);
 		} catch(Exception e){
