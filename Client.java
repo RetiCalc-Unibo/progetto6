@@ -43,26 +43,31 @@ public class Client {
                     System.out.print("[C] Inserisci i separatori: ");
                     delim = stdIn.readLine();
 
-                    System.out.println("[C] Conto le righe del file " + fileName + " con uno threshold di " + numParole + " e come delimitatori " + delim);
-
-                    System.out.println("[C] Nel file sono presenti " + serverRMI.conta_righe(fileName, numParole, delim) + " righe con più di " + numParole + " parole");
-
+                    System.out.println("[C] Conto le righe del file " + fileName + " con un threshold di " + numParole + " e come delimitatori " + delim);
+                    
+                    try {
+                        System.out.println("[C] Nel file sono presenti " + serverRMI.conta_righe(fileName, numParole, delim) + " righe con più di " + numParole + " parole");
+                    } catch (RemoteException re) {
+                        System.err.println("[C] Possibile errore nel file; " + re.getMessage());
+                        re.printStackTrace();
+                    }
 
                 } else if (service.equals("E")) {
                     String fileName;
-                    int numRiga;
+                    int numRiga, ris;
 
                     // Ricevo in input il nome del file
                     System.out.print("[C] Inserisci il nome del file: ");
                     fileName = stdIn.readLine();
                     // Ricevo l'intero
-                    System.out.print("[C] Inserisci il la riga da eliminare: ");
+                    System.out.print("[C] Inserisci il riga da eliminare: ");
                     numRiga = Integer.parseInt(stdIn.readLine());
 
-                    if (serverRMI.elimina_riga(fileName, numRiga) == 0) {
-                        System.out.println("[C] Elimino la riga " + numRiga + " dal file " + fileName);
-                    } else {
-                        System.out.println("[C] Servizio attualmente non disponibile");
+                    try {
+                        System.out.println("[C] La linea richiesta è stata eliminata e il file ha " + serverRMI.elimina_riga(fileName, numRiga) + " righe");
+                    } catch (RemoteException re) {
+                        System.err.println("[C] Possibile errore nel file; " + re.getMessage());
+                        re.printStackTrace();
                     }
                 } else {
                     System.out.println("[C] Servizio non esistente!");
@@ -71,11 +76,8 @@ public class Client {
                 System.out.print("[C] Servizio (C = Conta Parole - E = Elimina Riga), CTRL+D per uscire: ");
 
             }
-        } catch (RemoteException re) {
-            System.err.println("[C] Possibile errore nel file; " + re.getMessage());
-            re.printStackTrace();
         } catch (NotBoundException nbe) {
-            System.err.println("[C] Il nome fornito non risulta nel resgistry; " + nbe.getMessage());
+            System.err.println("[C] Il nome fornito non risulta nel registry; " + nbe.getMessage());
             System.exit(2);
         } catch (Exception e) {
             System.err.println("[C] " + e.getMessage());
