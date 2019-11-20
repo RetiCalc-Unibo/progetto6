@@ -40,8 +40,46 @@ public class ServerImpl extends UnicastRemoteObject implements RemOp {
 
     @Override
     public int elimina_riga(String fileName, int rowNum) throws RemoteException {
-        return 0;
+        if (!fileName.endsWith(".txt")) {
+            throw new RemoteException(fileName + " is not a text file");
+        }
 
+        File file = new File(fileName);
+
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line;
+            int numRowNew = 0;
+            int index = 0;
+            boolean checkRow = false;
+            File fileR = new File("alias");
+            PrintWriter pw = new PrintWriter(fileR);
+            while ((line = br.readLine()) != null) {
+                if (index != rowNum) {
+                    pw.println(line);
+                    numRowNew++;
+                } else {
+                    checkRow = true;
+                }
+                index++;
+            }
+            pw.close();
+            br.close();
+            if (!checkRow) {
+                throw new RemoteException("Row " + rowNum + " does not exist");
+            }
+            file.delete();
+            fileR.renameTo(file);
+
+            return numRowNew;
+
+
+        } catch (FileNotFoundException e) {
+            throw new RemoteException(fileName + " does not exist");
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RemoteException("Unexpected read error!");
+        }
     }
 
     // Avvio del Server RMI

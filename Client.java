@@ -60,7 +60,7 @@ public class Client {
                     System.out.print("[C] Inserisci il nome del file: ");
                     fileName = stdIn.readLine();
                     // Ricevo l'intero
-                    System.out.print("[C] Inserisci il riga da eliminare: ");
+                    System.out.print("[C] Inserisci la riga da eliminare: ");
                     numRiga = Integer.parseInt(stdIn.readLine());
 
                     try {
