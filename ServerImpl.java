@@ -1,16 +1,21 @@
 import java.io.*;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.StringTokenizer;
 
-public class ServerImpl implements RemOp {
+public class ServerImpl extends UnicastRemoteObject implements RemOp {
+
+    public ServerImpl() throws RemoteException {
+        super();
+    }
 
     @Override
     public int conta_righe(String fileName, int threshold, String delim) throws RemoteException {
         if (!fileName.endsWith(".txt")) {
             throw new RemoteException(fileName + " is not a text file");
         }
-        
+
         File file = new File(fileName);
 
         try {
@@ -36,6 +41,7 @@ public class ServerImpl implements RemOp {
     @Override
     public int elimina_riga(String fileName, int rowNum) throws RemoteException {
         return 0;
+
     }
 
     // Avvio del Server RMI
