@@ -38,7 +38,12 @@ public class Client {
                     fileName = stdIn.readLine();
                     // Ricevo l'intero
                     System.out.print("Client: Inserire il numero minimo di parole per riga: ");
-                    numParole = Integer.parseInt(stdIn.readLine());
+                    
+		    if((numParole = Integer.parseInt(stdIn.readLine())) < 0) {
+			System.out.println("Client: Errore, devi inserire un numero maggiore o uguale a 0");	
+                	System.out.print("Client: Digitare 'C' per il servizio di conta parole, 'E' per eliminare una riga o CTRL+D per uscire: ");
+			continue;
+		    }
                     // Ricevo i separatori
                     System.out.print("Client: Inserire i separatori: ");
                     delim = stdIn.readLine();
@@ -60,7 +65,11 @@ public class Client {
                     fileName = stdIn.readLine();
                     // Ricevo l'intero
                     System.out.print("Client: Inserire il numero della riga da eliminare: ");
-                    numRiga = Integer.parseInt(stdIn.readLine());
+                    if((numRiga = Integer.parseInt(stdIn.readLine())) < 1) {
+			System.out.println("Client: Errore, devi inserire un numero positivo");	
+                	System.out.print("Client: Digitare 'C' per il servizio di conta parole, 'E' per eliminare una riga o CTRL+D per uscire: ");
+			continue;
+		    }
 
                     try {
                         System.out.println("Client: La linea richiesta è stata eliminata e il file ha " + serverRMI.elimina_riga(fileName, numRiga) + " righe");
