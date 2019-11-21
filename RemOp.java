@@ -6,5 +6,6 @@ import java.rmi.RemoteException;
 
 public interface RemOp extends Remote {
     public int conta_righe(String fileName, int threshold, String delim) throws RemoteException, FileNotFoundException;
+    public int conta_righe_char(String fileName, int threshold, String delim) throws RemoteException, FileNotFoundException;
     public int elimina_riga(String fileName, int rowNum) throws RemoteException;
 }

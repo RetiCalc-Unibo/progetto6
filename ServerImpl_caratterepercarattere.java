@@ -4,7 +4,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.StringTokenizer;
 
-public class ServerImpl extends UnicastRemoteObject implements RemOp {
+public class ServerImplChar extends UnicastRemoteObject implements RemOp {
 
     public ServerImpl() throws RemoteException {
         super();
@@ -65,11 +65,20 @@ public class ServerImpl extends UnicastRemoteObject implements RemOp {
     // Avvio del Server RMI
     public static void main(String[] args) {
         final int REGISTRYPORT = 1099;
-        String registryHost = "localhost";
-        String serviceName = "Server";
+        String registryHost;
+        String serviceName;
+
+        if (args.length != 2) {
+            System.out.println("Server: Errore di sintassi, utilizzo: java ServerImpl serviceHost serviceName");
+            System.exit(1);
+        }
+
+        registryHost = args[0];
+        serviceName = args[1];
 
         // Registrazione del servizio RMI
         String completeName = "//" + registryHost + ":" + REGISTRYPORT + "/" + serviceName;
+
 
         try {
             ServerImpl serverRMI = new ServerImpl();

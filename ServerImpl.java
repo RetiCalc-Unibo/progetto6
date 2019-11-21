@@ -47,6 +47,51 @@ public class ServerImpl extends UnicastRemoteObject implements RemOp {
         }
     }
 
+    public int conta_righe_char(String fileName, int threshold, String delim) throws RemoteException {
+        int nread;
+        char read_char;
+        int occ;
+        int readDelim;
+
+        if (!fileName.endsWith(".txt")) {
+            throw new RemoteException(fileName + " is not a text file");
+        }
+
+        File file = new File(fileName);
+
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line;
+            occ = 0;
+            readDelim = 0;
+            boolean newLine = true;
+
+            while ((nread = br.read()) >= 0) {
+                    read_char = (char) nread;
+                    //System.out.println("Ho letto il carattere " + read_char);
+                    for (int i = 0; i < delim.length(); i++) {
+                        if (read_char == delim.charAt(i)) {
+                            readDelim++;
+                        }
+                    }
+
+                    if (readDelim > threshold) {
+                        occ++;
+                    }
+                    if(read_char == '\n'){
+                        readDelim = 0;
+                    }
+               
+            }
+
+            return occ;
+        } catch (FileNotFoundException e) {
+            throw new RemoteException(fileName + " does not exist");
+        } catch (IOException e) {
+            throw new RemoteException("Unexpected read error!");
+        }
+    }
+
     public int elimina_riga(String fileName, int rowNum) throws RemoteException {
         if (!fileName.endsWith(".txt")) {
             throw new RemoteException("Errore!" + fileName + " non e' un file di testo.");

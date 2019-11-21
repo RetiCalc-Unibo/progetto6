@@ -27,9 +27,9 @@ public class Client {
 
             String service;
 
-            System.out.print("Client: Digitare 'C' per il servizio di conta parole, 'E' per eliminare una riga o CTRL+D per uscire: ");
+            System.out.print("Client: Digitare 'C/CC' per il servizio di conta parole, 'E' per eliminare una riga o CTRL+D per uscire: ");
             while ((service = stdIn.readLine()) != null) {
-                if (service.equals("C")) {
+                if (service.equals("C") || service.equals("CC")) {
                     String fileName, delim;
                     int numParole;
 
@@ -41,7 +41,7 @@ public class Client {
                     
 		    if((numParole = Integer.parseInt(stdIn.readLine())) < 0) {
 			System.out.println("Client: Errore, devi inserire un numero maggiore o uguale a 0");	
-                	System.out.print("Client: Digitare 'C' per il servizio di conta parole, 'E' per eliminare una riga o CTRL+D per uscire: ");
+                	System.out.print("Client: Digitare 'C/CC' per il servizio di conta parole, 'E' per eliminare una riga o CTRL+D per uscire: ");
 			continue;
 		    }
                     // Ricevo i separatori
@@ -51,7 +51,15 @@ public class Client {
                     System.out.println("Client: Conto le righe del file " + fileName + " con piu' di " + numParole + " parole e come delimitatori " + delim);
                     
                     try {
-                        System.out.println("Client Nel file sono presenti " + serverRMI.conta_righe(fileName, numParole, delim) + " righe con più di " + numParole + " parole");
+                    	int serv = -1;
+                    	if(service.equals("C")){
+                    		time = System.nanoTime();
+                    		serv = serverRMI.conta_righe(fileName, numParole, delim);
+                    	}
+                    	if(service.equals("CC")){
+                    		time = System.nanoTime();
+                    		serv = serverRMI.conta_righe_char(fileName, numParole, delim);
+                    	}
                     } catch (RemoteException re) {
                         System.err.println("Client: Possibile errore nel file; " + re.getMessage());
                         re.printStackTrace();
