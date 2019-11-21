@@ -1,4 +1,5 @@
 import java.io.*;
+import java.time.*;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -17,11 +18,17 @@ public class ServerImpl extends UnicastRemoteObject implements RemOp {
         }
 
         File file = new File(fileName);
+        //long startTime = 0, elapsed = 0;
 
         try {
+            
+            long start = System.nanoTime();
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line;
             int occ = 0;
+
+
+            //startTime = System.nanoTime();
 
             while ((line = br.readLine()) != null) {
                 StringTokenizer tk = new StringTokenizer(line, delim);
@@ -29,6 +36,11 @@ public class ServerImpl extends UnicastRemoteObject implements RemOp {
                     occ++;
                 }
             }
+            br.close();
+
+            //long end = System.nanoTime();
+            //long elapsed = end - start;
+            //System.out.println("\nTEMPO TOK - " + threshold + " = " + elapsed + " ms\n");
 
             return occ;
         } catch (FileNotFoundException e) {
@@ -85,8 +97,16 @@ public class ServerImpl extends UnicastRemoteObject implements RemOp {
     // Avvio del Server RMI
     public static void main(String[] args) {
         final int REGISTRYPORT = 1099;
-        String registryHost = "localhost";
-        String serviceName = "Server";
+        String registryHost;
+        String serviceName;
+
+        if (args.length != 2) {
+            System.out.println("[S] Syntax: java ServerImpl serviceHost serviceName");
+            System.exit(1);
+        }
+
+        registryHost = args[0];
+        serviceName = args[1];
 
         // Registrazione del servizio RMI
         String completeName = "//" + registryHost + ":" + REGISTRYPORT + "/" + serviceName;
@@ -94,9 +114,9 @@ public class ServerImpl extends UnicastRemoteObject implements RemOp {
         try {
             ServerImpl serverRMI = new ServerImpl();
             Naming.rebind(completeName, serverRMI);
-            System.out.println("Server RMI: Servizio \"" + serviceName + "\" registrato");
+            System.out.println("[S] Servizio \"" + serviceName + "\" registrato");
         } catch (Exception e) {
-            System.err.println("Server RMI \"" + serviceName + "\": " + e.getMessage());
+            System.err.println("[S] \"" + serviceName + "\": " + e.getMessage());
             e.printStackTrace();
             System.exit(1);
         }
