@@ -11,22 +11,19 @@ public class ServerImpl extends UnicastRemoteObject implements RemOp {
         super();
     }
 
-    @Override
     public int conta_righe(String fileName, int threshold, String delim) throws RemoteException {
         if (!fileName.endsWith(".txt")) {
-            throw new RemoteException(fileName + " is not a text file");
+            throw new RemoteException("Errore!" + fileName + " non e' un file di testo.");
         }
 
         File file = new File(fileName);
         //long startTime = 0, elapsed = 0;
 
         try {
-            
             long start = System.nanoTime();
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line;
             int occ = 0;
-
 
             //startTime = System.nanoTime();
 
@@ -44,28 +41,28 @@ public class ServerImpl extends UnicastRemoteObject implements RemOp {
 
             return occ;
         } catch (FileNotFoundException e) {
-            throw new RemoteException(fileName + " does not exist");
+            throw new RemoteException("Errore! Il file " + fileName + " non esiste.");
         } catch (IOException e) {
-            throw new RemoteException("Unexpected read error!");
+            throw new RemoteException("Errore inaspettato di I/O!");
         }
     }
 
-    @Override
     public int elimina_riga(String fileName, int rowNum) throws RemoteException {
         if (!fileName.endsWith(".txt")) {
-            throw new RemoteException(fileName + " is not a text file");
+            throw new RemoteException("Errore!" + fileName + " non e' un file di testo.");
         }
 
         File file = new File(fileName);
 
         try {
-            BufferedReader br = new BufferedReader(new FileReader(file));
             String line;
-            int numRowNew = 0;
-            int index = 0;
+            int numRowNew = 0, index = 0;
             boolean checkRow = false;
+
+            BufferedReader br = new BufferedReader(new FileReader(file));
             File fileR = new File("alias");
             PrintWriter pw = new PrintWriter(fileR);
+
             while ((line = br.readLine()) != null) {
                 if (index != rowNum) {
                     pw.println(line);
@@ -75,22 +72,23 @@ public class ServerImpl extends UnicastRemoteObject implements RemOp {
                 }
                 index++;
             }
+
             pw.close();
             br.close();
+
             if (!checkRow) {
-                throw new RemoteException("Row " + rowNum + " does not exist");
+                throw new RemoteException("La riga " + rowNum + " non esiste!");
             }
+
             file.delete();
             fileR.renameTo(file);
 
             return numRowNew;
-
-
         } catch (FileNotFoundException e) {
-            throw new RemoteException(fileName + " does not exist");
+            throw new RemoteException("Errore! Il file " + fileName + " non esiste.");
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RemoteException("Unexpected read error!");
+            throw new RemoteException("Errore inaspettato di I/O!");
         }
     }
 
@@ -101,7 +99,7 @@ public class ServerImpl extends UnicastRemoteObject implements RemOp {
         String serviceName;
 
         if (args.length != 2) {
-            System.out.println("[S] Syntax: java ServerImpl serviceHost serviceName");
+            System.out.println("Server: Errore di sintassi, utilizzo: java ServerImpl serviceHost serviceName");
             System.exit(1);
         }
 
@@ -114,11 +112,11 @@ public class ServerImpl extends UnicastRemoteObject implements RemOp {
         try {
             ServerImpl serverRMI = new ServerImpl();
             Naming.rebind(completeName, serverRMI);
-            System.out.println("[S] Servizio \"" + serviceName + "\" registrato");
+            System.out.println("Server: Servizio \"" + serviceName + "\" registrato");
         } catch (Exception e) {
-            System.err.println("[S] \"" + serviceName + "\": " + e.getMessage());
+            System.err.println("Server: \"" + serviceName + "\": " + e.getMessage());
             e.printStackTrace();
-            System.exit(1);
+            System.exit(2);
         }
     }
 }
