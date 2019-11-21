@@ -62,7 +62,8 @@ public class ServerImpl extends UnicastRemoteObject implements RemOp {
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line;
             int numRowNew = 0;
-            int index = 0;
+            //Si parte da 1 nell'indicizzazione delle righe
+            int index = 1;
             boolean checkRow = false;
             File fileR = new File("alias");
             PrintWriter pw = new PrintWriter(fileR);
