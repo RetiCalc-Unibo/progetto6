@@ -53,11 +53,9 @@ public class Client {
                     try {
                     	int serv = -1;
                     	if(service.equals("C")){
-                    		time = System.nanoTime();
                     		serv = serverRMI.conta_righe(fileName, numParole, delim);
                     	}
                     	if(service.equals("CC")){
-                    		time = System.nanoTime();
                     		serv = serverRMI.conta_righe_char(fileName, numParole, delim);
                     	}
                     } catch (RemoteException re) {
