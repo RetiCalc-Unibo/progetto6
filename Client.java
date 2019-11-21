@@ -93,7 +93,7 @@ public class Client {
                     System.out.println("");
                 }
 
-                System.out.print("Client: Digitare 'C' per il servizio di conta parole, 'E' per eliminare una riga o CTRL+D per uscire: ");
+                System.out.print("Client: Digitare 'C/CC' per il servizio di conta parole, 'E' per eliminare una riga o CTRL+D per uscire: ");
             }
         } catch (NotBoundException nbe) {
             System.err.println("Client: Il nome fornito non risulta nel registry; " + nbe.getMessage());
